@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         mapOf(
             binding.upButton to 19, binding.downButton to 20, binding.leftButton to 21,
             binding.rightButton to 22, binding.selectButton to 23, binding.backButton to 4,
-            binding.homeButton to 3, binding.menuButton to 82, binding.rewindButton to 89,
+            binding.homeButton to 3, binding.rewindButton to 89,
             binding.playPauseButton to 85, binding.fastForwardButton to 90,
             binding.volumeDownButton to 25, binding.volumeUpButton to 24, binding.muteButton to 164
         ).forEach { (button, code) -> button.setOnClickListener { sendCommand("input keyevent " + code) } }
@@ -73,6 +73,19 @@ class MainActivity : AppCompatActivity() {
                 disconnect()
             }
         }
+    }
+
+    private fun keyCodeFor(char: Char): Int? = when {
+        char in 'a'..'z' -> 29 + (char - 'a')
+        char in 'A'..'Z' -> 29 + (char - 'A')
+        char in '0'..'9' -> if (char == '0') 7 else 7 + (char - '0')
+        char == ' ' -> 62
+        char == '.' -> 56
+        char == ',' -> 55
+        char == '-' -> 69
+        char == '@' -> 77
+        char == '/' -> 76
+        else -> null
     }
 
     private fun setControlsEnabled(enabled: Boolean) {
