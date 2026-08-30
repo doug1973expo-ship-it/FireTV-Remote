@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.FireTVRemote" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/remote_orange</item>
+        <item name="colorPrimaryVariant">@color/remote_orange</item>
+        <item name="colorOnPrimary">@color/remote_dark</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:navigationBarColor">@color/remote_dark</item>
+        <item name="android:statusBarColor">@color/remote_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>
