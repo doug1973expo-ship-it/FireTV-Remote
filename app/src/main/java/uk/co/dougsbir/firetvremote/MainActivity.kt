@@ -25,10 +25,13 @@ class MainActivity : AppCompatActivity() {
             binding.playPauseButton to 85, binding.fastForwardButton to 90,
             binding.volumeDownButton to 25, binding.volumeUpButton to 24, binding.muteButton to 164
         ).forEach { (button, code) -> button.setOnClickListener { sendCommand("input keyevent " + code) } }
+        binding.menuButton.setOnClickListener {
+            sendCommand("input keyevent --longpress KEYCODE_MENU")
+        }
         binding.sendTextButton.setOnClickListener {
-            val value = binding.textInput.text.toString()
-            if (value.isNotBlank()) {
-                sendCommand("input text '" + value.replace("'", "'\\''").replace(" ", "%s") + "'")
+            val codes = binding.textInput.text.toString().mapNotNull { keyCodeFor(it) }
+            if (codes.isNotEmpty()) {
+                sendCommand("input keyevent " + codes.joinToString(" "))
                 binding.textInput.text?.clear()
             }
         }
