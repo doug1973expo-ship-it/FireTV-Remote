@@ -1,7 +1,12 @@
 package uk.co.dougsbir.firetvremote
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -11,6 +16,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var adb: AdbClient? = null
     private var busy = false
+
+    private val speechLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val words = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            words?.firstOrNull()?.let { sendText(it) }
+        }
+    }
+
+    private val microphonePermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { allowed ->
+        if (allowed) startSpeech()
+        else Toast.makeText(this, "Microphone permission is needed", Toast.LENGTH_SHORT).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +50,13 @@ class MainActivity : AppCompatActivity() {
             sendCommand("input keyevent --longpress KEYCODE_MENU")
         }
         binding.sendTextButton.setOnClickListener {
-            val codes = binding.textInput.text.toString().mapNotNull { keyCodeFor(it) }
-            if (codes.isNotEmpty()) {
-                sendCommand("input keyevent " + codes.joinToString(" "))
-                binding.textInput.text?.clear()
+            sendText(binding.textInput.text.toString())
+        }
+        binding.micButton.setOnClickListener {
+            if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                startSpeech()
+            } else {
+                microphonePermission.launch(Manifest.permission.RECORD_AUDIO)
             }
         }
         setControlsEnabled(false)
@@ -78,6 +102,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun sendText(value: String) {
+        val codes = value.mapNotNull { keyCodeFor(it) }
+        if (codes.isEmpty()) {
+            Toast.makeText(this, "Type or speak some text first", Toast.LENGTH_SHORT).show()
+            return
+        }
+        sendCommand("input keyevent " + codes.joinToString(" "))
+        binding.textInput.text?.clear()
+    }
+
+    private fun startSpeech() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak text for Fire TV")
+        }
+        try { speechLauncher.launch(intent) }
+        catch (_: Exception) {
+            Toast.makeText(this, "Speech recognition is not available", Toast.LENGTH_LONG).show()
+        }
+    }
+
     private fun keyCodeFor(char: Char): Int? = when {
         char in 'a'..'z' -> 29 + (char - 'a')
         char in 'A'..'Z' -> 29 + (char - 'A')
@@ -96,7 +141,7 @@ class MainActivity : AppCompatActivity() {
             binding.selectButton, binding.backButton, binding.homeButton, binding.menuButton,
             binding.rewindButton, binding.playPauseButton, binding.fastForwardButton,
             binding.volumeDownButton, binding.volumeUpButton, binding.muteButton,
-            binding.sendTextButton).forEach { it.isEnabled = enabled }
+            binding.sendTextButton, binding.micButton).forEach { it.isEnabled = enabled }
         binding.textInput.isEnabled = enabled
     }
 
