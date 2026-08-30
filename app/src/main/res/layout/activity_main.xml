@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/remote_dark" android:fillViewport="true">
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:orientation="vertical" android:padding="20dp">
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fire TV Remote" android:textColor="@color/remote_orange" android:textSize="28sp" android:textStyle="bold"/>
+<TextView android:id="@+id/statusText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Not connected" android:textColor="#BDBDBD"/>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:gravity="center" android:orientation="horizontal">
+<EditText android:id="@+id/ipInput" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:backgroundTint="@color/remote_orange" android:hint="@string/fire_tv_ip" android:inputType="text" android:singleLine="true" android:textColor="@color/white" android:textColorHint="#888888"/>
+<Button android:id="@+id/connectButton" android:layout_width="wrap_content" android:layout_height="56dp" android:layout_marginStart="10dp" android:text="@string/connect"/>
+</LinearLayout>
+<GridLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="22dp" android:columnCount="3" android:rowCount="3">
+<Space android:layout_width="76dp" android:layout_height="68dp"/><Button android:id="@+id/upButton" android:layout_width="76dp" android:layout_height="68dp" android:text="▲"/><Space android:layout_width="76dp" android:layout_height="68dp"/>
+<Button android:id="@+id/leftButton" android:layout_width="76dp" android:layout_height="68dp" android:text="◀"/><Button android:id="@+id/selectButton" android:layout_width="76dp" android:layout_height="68dp" android:text="OK"/><Button android:id="@+id/rightButton" android:layout_width="76dp" android:layout_height="68dp" android:text="▶"/>
+<Space android:layout_width="76dp" android:layout_height="68dp"/><Button android:id="@+id/downButton" android:layout_width="76dp" android:layout_height="68dp" android:text="▼"/><Space android:layout_width="76dp" android:layout_height="68dp"/>
+</GridLayout>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+<Button android:id="@+id/backButton" style="@style/RemoteButton" android:text="Back"/><Button android:id="@+id/homeButton" style="@style/RemoteButton" android:text="Home"/><Button android:id="@+id/menuButton" style="@style/RemoteButton" android:text="Menu"/>
+</LinearLayout>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+<Button android:id="@+id/rewindButton" style="@style/RemoteButton" android:text="⏪"/><Button android:id="@+id/playPauseButton" style="@style/RemoteButton" android:text="⏯"/><Button android:id="@+id/fastForwardButton" style="@style/RemoteButton" android:text="⏩"/>
+</LinearLayout>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+<Button android:id="@+id/volumeDownButton" style="@style/RemoteButton" android:text="Vol −"/><Button android:id="@+id/muteButton" style="@style/RemoteButton" android:text="Mute"/><Button android:id="@+id/volumeUpButton" style="@style/RemoteButton" android:text="Vol +"/>
+</LinearLayout>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:orientation="horizontal">
+<EditText android:id="@+id/textInput" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:backgroundTint="@color/remote_orange" android:hint="Type text on Fire TV" android:singleLine="true" android:textColor="@color/white" android:textColorHint="#888888"/>
+<Button android:id="@+id/sendTextButton" android:layout_width="wrap_content" android:layout_height="56dp" android:layout_marginStart="10dp" android:text="Send"/>
+</LinearLayout>
+</LinearLayout></ScrollView>
