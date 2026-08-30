@@ -68,7 +68,7 @@ class AdbClient private constructor(
         val length = readLeInt()
         val checksum = readLeInt()
         val magic = readLeInt()
-        require(magic == command xor -1) { "Invalid response from Fire TV" }
+        require(magic == (command xor -1)) { "Invalid response from Fire TV" }
         require(length in 0..MAX_PACKET) { "Invalid ADB packet size" }
         val data = ByteArray(length)
         input.readFully(data)
