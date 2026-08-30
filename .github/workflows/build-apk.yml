@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -30,6 +30,13 @@ jobs:
 
       - name: Build debug APK
         run: gradle --no-daemon assembleRelease
+
+      - name: Publish direct APK download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view latest >/dev/null 2>&1 || gh release create latest --title "Fire TV Remote APK" --notes "Latest installable Android APK."
+          gh release upload latest app/build/outputs/apk/release/app-release.apk --clobber
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
